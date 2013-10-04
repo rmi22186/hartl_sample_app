@@ -7,6 +7,7 @@ class User < ActiveRecord::Base
 					uniqueness: { case_sensitive: false}
 	has_secure_password
 	validates :password, length: { minimum: 6 }
+
   def User.new_remember_token
     SecureRandom.urlsafe_base64
   end
@@ -15,9 +16,18 @@ class User < ActiveRecord::Base
     Digest::SHA1.hexdigest(token.to_s)
   end
 
+  def feed
+      # this is preliminary
+      Micropost.where("user_id = ?", id)
+    end
+
   private
 
     def create_remember_token
       self.remember_token = User.encrypt(User.new_remember_token)
     end
+
+    has_many :microposts, dependent: :destroy
+
+
 end
