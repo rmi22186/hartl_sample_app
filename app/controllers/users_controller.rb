@@ -35,6 +35,10 @@ def show
     end
   end
 
+  def index
+    @users = User.paginate(page: params[:page])
+  end
+
   private
 
     def user_params
@@ -49,9 +53,7 @@ def show
       redirect_to(root_url) unless current_user?(@user)
 
 
-    def index
-      @users = User.paginate(page: params[:page])
-    end
+
 
     def destroy
       User.find(params[:id]).destroy
